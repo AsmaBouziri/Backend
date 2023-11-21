@@ -7,7 +7,10 @@ router.post("/Books",bookController.addBook)
 router.get("/All",bookController.getAllBooks)
 router.get("/id/:id",bookController.getBookByID)
 router.patch("/update/:id",bookController.updateBOOK)
-router.delete("/delete/:id",bookController.deleteBook)
+router.delete("/delete",bookController.deleteBook)
+router.get("/author/:id",bookController.getBookByAuthor)
+
+
 
 
 

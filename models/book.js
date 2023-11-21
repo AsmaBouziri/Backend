@@ -13,4 +13,8 @@ const BookSchema = mongoose.Schema({
   ],
 });
 
+BookSchema.statics.findByAuthor = function (authorId) {
+  return this.find({ Author: authorId }).populate("Author");
+};
+
 module.exports = mongoose.model("Book", BookSchema);

@@ -39,7 +39,40 @@ const getAllBooks = (req, res) => {
     });
 };
 
-/*Afficher un livre selon id*/
+//FindByAuthor
+const getBookByAuthor = (req, res) => {
+  const authorId = req.params.id;
+  console.log(authorId);
+  Book.findByAuthor(authorId)
+    .then((booksByAuthor) => {
+      if (!booksByAuthor) {
+        res.status(404).json({
+          message: "livre non trouvé!",
+        });
+      } else {
+        res.status(200).json({
+          Book: booksByAuthor,
+          message: "livre trouvé!",
+        });
+      }
+    })
+    .catch((err) => {
+      res.status(500).json({ message: err.message });
+    });
+};
+
+// //FindByAuthor
+// const getBookByAuthor = async (req, res) => {
+//   try {
+//     const authorId = req.params.id;
+//     const booksByAuthor = await Book.findByAuthor(authorId);
+//     console.log(booksByAuthor);
+//     res.json(booksByAuthor);
+//   } catch (err) {
+//     res.status(500).json({ message: err.message });
+//   }
+// };
+
 const getBookByID = (req, res) => {
   Book.findOne({ _id: req.params.id })
     .populate("Author")
@@ -63,32 +96,6 @@ const getBookByID = (req, res) => {
       });
     });
 };
-
-// /*Afficher les livres selon nom auteur*/
-// const getBookByAuthName = (req, res) => {
-//   Book.find({ "Author.firstName": req.params.nom })
-//     .populate("Author")
-//     .populate("Category")
-//     .then((livres) => {
-//       console.log(livres)
-//       if (!livres) {
-//         return res.status(404).json({
-//           message: "Aucun livre trouvé pour cet auteur.",
-//         });
-//       } else {
-//         res.status(200).json({
-//           Livres: livres,
-//           message: "Livres trouvés",
-//         });
-//       }
-//     })
-//     .catch((error) => {
-//       res.status(500).json({
-//         error: error.message,
-//         message: "Problème d'extraction des livres!",
-//       });
-//     });
-// };
 
 /*Modifier un livre avec son id en paramétre */
 const updateBOOK = (req, res) => {
@@ -134,4 +141,5 @@ module.exports = {
   getBookByID,
   updateBOOK,
   deleteBook,
+  getBookByAuthor,
 };

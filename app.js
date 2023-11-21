@@ -2,6 +2,7 @@ const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
 const taskRoutes = require("./routes/task");
+const taskasyncRoutes = require("./routes/taskascyn");
 const authRoutes = require("./routes/user");
 const bookRoutes = require("./routes/book");
 const authorRoutes = require("./routes/author");
@@ -31,18 +32,11 @@ app.use((req, res, next) => {
 });
 
 app.use("/api/tasks", taskRoutes);
+app.use("/api/tasksasync", taskasyncRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/book", bookRoutes);
 app.use("/api/auteur", authorRoutes);
 app.use("/api/category", categoryRoutes);
 
-// app.get("/api/tasks", (req, res, next) => {
-//   const todos = [
-//     { _id: "1", title: "learn js", duration: "30" },
-//     { _id: "2", title: "learn nodejs", duration: "40" },
-//     { _id: "3", title: "learn react", duration: "50" },
-//   ];
-//   res.status(200).json(todos);
-// });
 
 module.exports = app;
