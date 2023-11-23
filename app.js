@@ -7,6 +7,7 @@ const authRoutes = require("./routes/user");
 const bookRoutes = require("./routes/book");
 const authorRoutes = require("./routes/author");
 const categoryRoutes = require("./routes/category");
+const eventRoutes = require("./routes/event");
 
 mongoose
   .connect("mongodb://127.0.0.1:27017/ToDo", {
@@ -37,6 +38,6 @@ app.use("/api/auth", authRoutes);
 app.use("/api/book", bookRoutes);
 app.use("/api/auteur", authorRoutes);
 app.use("/api/category", categoryRoutes);
-
+app.use("/api/event", eventRoutes);
 
 module.exports = app;

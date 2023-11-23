@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const uniqueValidator = require("mongoose-unique-validator");
 
 const userSchema = mongoose.Schema(
   {
@@ -14,6 +15,8 @@ const userSchema = mongoose.Schema(
     toObject: { virtuals: true },
   }
 );
+
+userSchema.plugin(uniqueValidator);
 
 userSchema.virtual("name").get(function () {
   return this.firstName + " " + this.lastName;

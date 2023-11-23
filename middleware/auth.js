@@ -1,6 +1,7 @@
 const jwt = require("jsonwebtoken");
 const User = require("../models/user");
 const { response } = require("express");
+const Joi = require("joi");
 
 module.exports.loggedMiddleware = (req, res, next) => {
   try {
@@ -38,4 +39,41 @@ module.exports.isAdmin = (req, res, next) => {
   } catch (error) {
     res.status(401).json({ error: error.message });
   }
+};
+
+const roles = ["admin", "user"];
+module.exports.validateSignup = (req, res, next) => {
+  const valideUser = Joi.object({
+    firstName: Joi.string().alphanum().min(3).max(30).required(),
+    lastName: Joi.string().alphanum().min(3).max(30).required(),
+    email: Joi.string().email().required(),
+    password: Joi.string().required(),
+    role: Joi.string()
+      .valid(...roles)
+      .required(),
+  });
+
+  const { error } = valideUser.validate(req.body);
+
+  if (error) {
+    return res.status(400).json({ error: error.details[0].message });
+  }
+
+  next();
+};
+
+module.exports.validateEvent = (req, res, next) => {
+  const valideEvent = Joi.object({
+    title: Joi.string().required(),
+    debutDate: Joi.date().iso().required(),
+    finDate: Joi.date().iso().min(Joi.ref("debutDate")).required(),
+  });
+
+  const { error } = valideEvent.validate(req.body);
+
+  if (error) {
+    return res.status(400).json({ error: error.details[0].message });
+  }
+
+  next();
 };

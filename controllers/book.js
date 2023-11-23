@@ -1,6 +1,8 @@
 const Book = require("../models/book");
 const Auteur = require("../models/Author");
 
+const validator = require("validator");
+
 /*ajouter livre*/
 const addBook = (req, res) => {
   const book = new Book(req.body);
@@ -135,6 +137,26 @@ const deleteBook = (req, res) => {
     });
 };
 
+const createBook = async (req, res) => {
+  const { Author, title } = req.body;
+  console.log(Author);
+  Book.findByAuthor(Author)
+    .then((authorBooks) => {
+      if (!authorBooks) {
+        return res
+          .status(400)
+          .json({ error: "L'auteur doit avoir déjà écrit d'autres livres" });
+      } else {
+        // L'auteur n'a pas encore écrit de livres
+        const newBook = new Book(req.body);
+        newBook.save().then(() => res.status(201).json(newBook));
+      }
+    })
+    .catch((err) => {
+      res.status(500).json({ message: err.message });
+    });
+};
+
 module.exports = {
   getAllBooks,
   addBook,
@@ -142,4 +164,5 @@ module.exports = {
   updateBOOK,
   deleteBook,
   getBookByAuthor,
+  createBook,
 };
